@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.sun.imagegif.R
 import com.sun.imagegif.data.model.Gif
+import com.sun.imagegif.data.source.local.GifLocalDataSource
+import com.sun.imagegif.data.source.remote.GifRemoteDataSource
 import com.sun.imagegif.data.source.repositories.GifRepository
 import com.sun.imagegif.ui.detail.DetailFragment
 import com.sun.imagegif.ui.search.adapter.SearchAdapter
@@ -18,7 +20,12 @@ class SearchGifFragment : Fragment(),
     SearchGifContract.View {
 
     private val presenter by lazy {
-        SearchGifPresenter(GifRepository.INSTANCE)
+        SearchGifPresenter(
+            GifRepository.getInstance(
+                GifLocalDataSource.getInstance(requireContext()),
+                GifRemoteDataSource.getInstance(),
+            )
+        )
     }
     private val searchAdapter by lazy {
         SearchAdapter()
@@ -60,7 +67,7 @@ class SearchGifFragment : Fragment(),
         gifImageRecyclerView.adapter = searchAdapter
     }
 
-    private fun handleEvent(){
+    private fun handleEvent() {
         searchAdapter.setOnClickItemListener {
             addFragment(DetailFragment.newInstance(Bundle().apply {
                 putParcelable(Constant.BUNDLE_GIF, it)

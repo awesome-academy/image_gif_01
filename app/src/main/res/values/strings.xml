@@ -11,4 +11,6 @@
     <string name="title_random">Random</string>
     <string name="title_related">Related</string>
     <string name="title_storage">Storage</string>
+    <string name="delete_failed">Delete failed</string>
+    <string name="download_failed">Download failed</string>
 </resources>
