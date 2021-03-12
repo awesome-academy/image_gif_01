@@ -16,4 +16,5 @@
     <string name="dialog_download">Do you want download?</string>
     <string name="answer_yes">Yes</string>
     <string name="answer_no">No</string>
+    <string name="dialog_delete_gif">Do you want delete gif?</string>
 </resources>
