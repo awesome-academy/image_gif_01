@@ -6,11 +6,7 @@ import com.sun.imagegif.data.source.GifDataSource
 import com.sun.imagegif.data.source.remote.fetchjson.GetJsonFromUrl
 import com.sun.imagegif.utils.Constant
 
-class GifRemoteDataSource : GifDataSource.Remote {
-
-    private object Holder {
-        val INSTANCE = GifRemoteDataSource()
-    }
+class GifRemoteDataSource private constructor() : GifDataSource.Remote {
 
     override fun getTrending(listener: OnFetchDataJsonListener<MutableList<Gif>>) {
         val trendingUrl = Constant.BASE_URL +
@@ -61,8 +57,14 @@ class GifRemoteDataSource : GifDataSource.Remote {
     }
 
     companion object {
-        val INSTANCE: GifRemoteDataSource by lazy {
-            Holder.INSTANCE
-        }
+        @Volatile
+        private var instance: GifRemoteDataSource? = null
+
+        fun getInstance(): GifRemoteDataSource =
+            instance ?: synchronized(this) {
+                instance ?: GifRemoteDataSource().also {
+                    instance = it
+                }
+            }
     }
 }
