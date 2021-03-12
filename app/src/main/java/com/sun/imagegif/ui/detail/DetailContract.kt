@@ -8,6 +8,8 @@ interface DetailContract {
     interface Presenter : BasePresenter<View> {
 
         fun saveGif(gif: Gif)
+
+        fun getRelated(keyword: String)
     }
 
     interface View {
@@ -15,5 +17,9 @@ interface DetailContract {
         fun onSaveGifSuccess(gif: Gif)
 
         fun onSaveGifError(e: Int)
+
+        fun onGetRelatedSuccess(gifs: MutableList<Gif>)
+
+        fun onGetRelatedError(e: Exception?)
     }
 }

@@ -8,24 +8,28 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.sun.imagegif.R
 import com.sun.imagegif.data.model.Gif
 import com.sun.imagegif.data.source.local.GifLocalDataSource
 import com.sun.imagegif.data.source.remote.GifRemoteDataSource
 import com.sun.imagegif.data.source.repositories.GifRepository
+import com.sun.imagegif.ui.detail.adapter.RelatedAdapter
 import com.sun.imagegif.utils.Constant
+import com.sun.imagegif.utils.addFragment
 import com.sun.imagegif.utils.loadGifUrl
 import com.sun.imagegif.utils.loadImageUrl
 import kotlinx.android.synthetic.main.fragment_detail.*
 
-
 class DetailFragment : Fragment(), DetailContract.View {
+
+    private val relatedAdapter by lazy { RelatedAdapter() }
 
     private val presenter by lazy {
         DetailPresenter(
             GifRepository.getInstance(
                 GifLocalDataSource.getInstance(requireContext()),
-                GifRemoteDataSource.getInstance(),
+                GifRemoteDataSource.getInstance()
             )
         )
     }
@@ -57,8 +61,15 @@ class DetailFragment : Fragment(), DetailContract.View {
         Toast.makeText(context, getString(e), Toast.LENGTH_SHORT).show()
     }
 
+    override fun onGetRelatedSuccess(gifs: MutableList<Gif>) {
+        relatedAdapter.addRelated(gifs)
+    }
+
+    override fun onGetRelatedError(e: Exception?) = Unit
+
     private fun initViews() {
         initDetailView()
+        initRelatedView()
     }
 
     private fun initDetailView() {
@@ -67,6 +78,7 @@ class DetailFragment : Fragment(), DetailContract.View {
             userImageView.loadImageUrl(gif.user.avatarUrl)
             titleDetailsTextView.text = gif.title
             userNameTextView.text = gif.user.name
+            presenter.getRelated(gif.title)
             downloadImageButton.setOnClickListener {
                 showAlertDialog {
                     presenter.saveGif(gif)
@@ -75,9 +87,19 @@ class DetailFragment : Fragment(), DetailContract.View {
         }
     }
 
+    private fun initRelatedView() {
+        relatedRecyclerView.adapter = relatedAdapter
+    }
+
     private fun handleEvent() {
         previousImageButton.setOnClickListener {
-            fragmentManager?.popBackStack()
+            fragmentManager?.popBackStack(0, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
+        relatedAdapter.setOnClickItemListener {
+            addFragment(DetailFragment.newInstance(Bundle().apply {
+                putParcelable(Constant.BUNDLE_GIF, it)
+            }), R.id.containerLayout)
         }
     }
 
