@@ -29,6 +29,13 @@ class StorageAdapter : RecyclerView.Adapter<StorageViewHolder>() {
         }
     }
 
+    fun deleteGif(gif: Gif) {
+        gifs.indexOf(gif).also {
+            gifs.removeAt(it)
+            notifyItemRemoved(it)
+        }
+    }
+
     fun setOnClickItemListener(listener: OnClickItemListener) {
         this.listener = listener
     }
