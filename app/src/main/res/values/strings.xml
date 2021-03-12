@@ -13,4 +13,7 @@
     <string name="title_storage">Storage</string>
     <string name="delete_failed">Delete failed</string>
     <string name="download_failed">Download failed</string>
+    <string name="dialog_download">Do you want download?</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
 </resources>
