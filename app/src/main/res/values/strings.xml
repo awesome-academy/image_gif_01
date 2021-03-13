@@ -17,4 +17,5 @@
     <string name="answer_yes">Yes</string>
     <string name="answer_no">No</string>
     <string name="dialog_delete_gif">Do you want delete gif?</string>
+    <string name="choose_share">Choose an app</string>
 </resources>

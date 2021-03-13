@@ -55,6 +55,7 @@ class StorageFragment : Fragment(), StorageContract.View {
 
     override fun onGetGifsLocalSuccess(data: MutableList<Gif>) {
         storageAdapter.updateData(data)
+        swipeRefresh.isRefreshing = false
     }
 
     override fun onDeleteGifSuccess(gif: Gif) {
@@ -62,6 +63,7 @@ class StorageFragment : Fragment(), StorageContract.View {
     }
 
     override fun onError(e: Int) {
+        swipeRefresh.isRefreshing = false
         Toast.makeText(context, getString(e), Toast.LENGTH_SHORT).show()
     }
 
@@ -88,6 +90,9 @@ class StorageFragment : Fragment(), StorageContract.View {
                 }
             }
         })
+        swipeRefresh.setOnRefreshListener {
+            presenter.getGifsLocal()
+        }
     }
 
     private fun showAlertDialog(onAccept: (() -> Unit)) {
