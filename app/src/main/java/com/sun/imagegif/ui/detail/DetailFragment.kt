@@ -15,10 +15,7 @@ import com.sun.imagegif.data.source.local.GifLocalDataSource
 import com.sun.imagegif.data.source.remote.GifRemoteDataSource
 import com.sun.imagegif.data.source.repositories.GifRepository
 import com.sun.imagegif.ui.detail.adapter.RelatedAdapter
-import com.sun.imagegif.utils.Constant
-import com.sun.imagegif.utils.addFragment
-import com.sun.imagegif.utils.loadGifUrl
-import com.sun.imagegif.utils.loadImageUrl
+import com.sun.imagegif.utils.*
 import kotlinx.android.synthetic.main.fragment_detail.*
 
 class DetailFragment : Fragment(), DetailContract.View {
@@ -83,6 +80,9 @@ class DetailFragment : Fragment(), DetailContract.View {
                 showAlertDialog {
                     presenter.saveGif(gif)
                 }
+            }
+            shareImageButton.setOnClickListener {
+                ShareGif(requireContext()).execute(gif.imageUrl)
             }
         }
     }
